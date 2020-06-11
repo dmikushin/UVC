@@ -14,8 +14,7 @@ class ViewController: NSViewController {
 		super.viewDidLoad()
 		// Do any additional setup after loading the view.
 		do {
-			let allDevies: [AVCaptureDevice] = AVCaptureDevice.devices(for: .video)
-			let aDevice: AVCaptureDevice = choose aDevie from allDevices
+            let aDevice: AVCaptureDevice = AVCaptureDevice.default(for: .video)!
 			
 			let uvc: UVC = try UVC(device: aDevice)
 			
