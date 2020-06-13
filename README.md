@@ -1,4 +1,5 @@
-# UVC
+# A UVC interface for the MacOS compatible camera
+
 This framework provides an interface of UVC for the compatible camera with AVFoundation.  
 i.e. 
 ```
