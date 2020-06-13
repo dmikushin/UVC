@@ -30,9 +30,9 @@ public class UVC {
 			let deviceInterface: UnsafeMutablePointer<UnsafeMutablePointer<IOUSBDeviceInterface>> = try $0.getInterface(uuid: kIOUSBDeviceInterfaceID)
 			defer { _ = deviceInterface.pointee.pointee.Release(deviceInterface) }
 			let interfaceRequest: IOUSBFindInterfaceRequest = IOUSBFindInterfaceRequest(bInterfaceClass: 0xe,
-			                                                                            bInterfaceSubClass: 0x1,
-			                                                                            bInterfaceProtocol: UInt16(kIOUSBFindInterfaceDontCare),
-			                                                                            bAlternateSetting: UInt16(kIOUSBFindInterfaceDontCare))
+                bInterfaceSubClass: 0x1,
+                bInterfaceProtocol: UInt16(kIOUSBFindInterfaceDontCare),
+                bAlternateSetting: UInt16(kIOUSBFindInterfaceDontCare))
 			try deviceInterface.iterate(of: interfaceRequest) {
 				interfaceRef = try $0.getInterface(uuid: kIOUSBInterfaceInterfaceID)
 			}
@@ -97,27 +97,28 @@ private extension String {
 	}
 }
 private let kIOUSBInterfaceUserClientTypeID: CFUUID = CFUUIDGetConstantUUIDWithBytes(kCFAllocatorDefault,
-                                                                                     0x2d, 0x97, 0x86, 0xc6,
-                                                                                     0x9e, 0xf3, 0x11, 0xD4,
-                                                                                     0xad, 0x51, 0x00, 0x0a,
-                                                                                     0x27, 0x05, 0x28, 0x61)
+        0x2d, 0x97, 0x86, 0xc6,
+        0x9e, 0xf3, 0x11, 0xD4,
+        0xad, 0x51, 0x00, 0x0a,
+        0x27, 0x05, 0x28, 0x61)
 private let kIOUSBInterfaceInterfaceID: CFUUID =  CFUUIDGetConstantUUIDWithBytes(kCFAllocatorDefault,
-                                                                                 0x73, 0xc9, 0x7a, 0xe8,
-                                                                                 0x9e, 0xf3, 0x11, 0xD4,
-                                                                                 0xb1, 0xd0, 0x00, 0x0a,
-                                                                                 0x27, 0x05, 0x28, 0x61)
+        0x73, 0xc9, 0x7a, 0xe8,
+        0x9e, 0xf3, 0x11, 0xD4,
+        0xb1, 0xd0, 0x00, 0x0a,
+        0x27, 0x05, 0x28, 0x61)
 private let kIOUSBDeviceUserClientTypeID: CFUUID = CFUUIDGetConstantUUIDWithBytes(kCFAllocatorDefault,
-                                                                                  0x9d, 0xc7, 0xb7, 0x80,
-                                                                                  0x9e, 0xc0, 0x11, 0xD4,
-                                                                                  0xa5, 0x4f, 0x00, 0x0a,
-                                                                                  0x27, 0x05, 0x28, 0x61)
-private let kIOCFPlugInInterfaceID: CFUUID =  CFUUIDGetConstantUUIDWithBytes(kCFAllocatorDefault,
-                                                                             0xC2, 0x44, 0xE8, 0x58,
-                                                                             0x10, 0x9C, 0x11, 0xD4,
-                                                                             0x91, 0xD4, 0x00, 0x50,
-                                                                             0xE4, 0xC6, 0x42, 0x6F)
+        0x9d, 0xc7, 0xb7, 0x80,
+        0x9e, 0xc0, 0x11, 0xD4,
+        0xa5, 0x4f, 0x00, 0x0a,
+        0x27, 0x05, 0x28, 0x61)
+private let kIOCFPlugInInterfaceID: CFUUID =
+    CFUUIDGetConstantUUIDWithBytes(kCFAllocatorDefault,
+        0xC2, 0x44, 0xE8, 0x58,
+        0x10, 0x9C, 0x11, 0xD4,
+        0x91, 0xD4, 0x00, 0x50,
+        0xE4, 0xC6, 0x42, 0x6F)
 private let kIOUSBDeviceInterfaceID: CFUUID =  CFUUIDGetConstantUUIDWithBytes(kCFAllocatorDefault,
-                                                                              0x5c, 0x81, 0x87, 0xd0,
-                                                                              0x9e, 0xf3, 0x11, 0xD4,
-                                                                              0x8b, 0x45, 0x00, 0x0a,
-                                                                              0x27, 0x05, 0x28, 0x61)
+        0x5c, 0x81, 0x87, 0xd0,
+        0x9e, 0xf3, 0x11, 0xD4,
+        0x8b, 0x45, 0x00, 0x0a,
+        0x27, 0x05, 0x28, 0x61)

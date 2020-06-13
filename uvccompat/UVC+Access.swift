@@ -79,13 +79,19 @@ internal extension UVC {
 		case cur = 0b00000001
 	}
 	func set<T>(unit: UInt16, selector: UInt16, target: SetTarget, value: T) {
-		var ref: T = value
+        let pointer = UnsafeMutableRawPointer.allocate(
+            byteCount: MemoryLayout<T>.size,
+            alignment: MemoryLayout<T>.alignment)
+        defer {
+            pointer.deallocate()
+        }
+        pointer.storeBytes(of: value, as: T.self)
 		var request: IOUSBDevRequest = IOUSBDevRequest(bmRequestType: UInt8(kUSBTypeOut),
 		                                               bRequest: target.rawValue,
 		                                               wValue: (selector<<8)|flag,
 		                                               wIndex: (unit<<8)|flag,
 		                                               wLength: UInt16(MemoryLayout<T>.size),
-		                                               pData: &ref,
+		                                               pData: pointer,
 		                                               wLenDone: 0)
         var retstr : String = "(unknown error code)"
         var ret = interface.pointee.pointee.USBInterfaceOpen(interface)
