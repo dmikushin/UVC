@@ -22,14 +22,34 @@ internal extension UVC {
 			                                               wIndex: (unit<<8)|flag,
 			                                               wLength: UInt16(MemoryLayout<T>.size),
 			                                               pData: UnsafeMutablePointer<T>(mutating: ref),
-			                                               wLenDone: 0)
-			guard
-				interface.pointee.pointee.USBInterfaceOpen(interface) == kIOReturnSuccess,
-				interface.pointee.pointee.ControlRequest(interface, 0, &request) == kIOReturnSuccess,
-				interface.pointee.pointee.USBInterfaceClose(interface) == kIOReturnSuccess else {
-					os_log("%@, %@", log: facility, type: .fault, #function, #line)
-					return ref.pointee
-			}
+
+                                                           wLenDone: 0)
+            var retstr : String = "(unknown error code)"
+            var ret = interface.pointee.pointee.USBInterfaceOpen(interface)
+            guard ret == kIOReturnSuccess else {
+                if let cretstr = mach_error_string(ret) {
+                    retstr = String(cString: cretstr)
+                }
+                os_log("[%@:%d] USBInterfaceOpen failed with status %@", log: facility, type: .fault, #file, #line, retstr)
+                return ref.pointee
+            }
+            defer {
+                let ret = interface.pointee.pointee.USBInterfaceClose(interface)
+                if (ret != kIOReturnSuccess) {
+                    if let cretstr = mach_error_string(ret) {
+                        retstr = String(cString: cretstr)
+                    }
+                    os_log("[%@:%d] USBInterfaceClose failed with status %@", log: facility, type: .fault, #file, #line, retstr)
+                }
+            }
+            ret = interface.pointee.pointee.ControlRequest(interface, 0, &request)
+            guard ret == kIOReturnSuccess else {
+                if let cretstr = mach_error_string(ret) {
+                    retstr = String(cString: cretstr)
+                }
+                os_log("[%@:%d] USBInterfaceClose failed with status %@", log: facility, type: .fault, #file, #line, retstr)
+                return ref.pointee
+            }
 			return ref.pointee
 		}
 	}
@@ -67,13 +87,32 @@ internal extension UVC {
 		                                               wLength: UInt16(MemoryLayout<T>.size),
 		                                               pData: &ref,
 		                                               wLenDone: 0)
-		guard
-			interface.pointee.pointee.USBInterfaceOpen(interface) == kIOReturnSuccess,
-			interface.pointee.pointee.ControlRequest(interface, 0, &request) == kIOReturnSuccess,
-			interface.pointee.pointee.USBInterfaceClose(interface) == kIOReturnSuccess else {
-				os_log("%@, %@", log: facility, type: .fault, #function, #line)
-				return
-		}
+        var retstr : String = "(unknown error code)"
+        var ret = interface.pointee.pointee.USBInterfaceOpen(interface)
+        guard ret == kIOReturnSuccess else {
+            if let cretstr = mach_error_string(ret) {
+                retstr = String(cString: cretstr)
+            }
+            os_log("[%@:%d] USBInterfaceOpen failed with status %@", log: facility, type: .fault, #file, #line, retstr)
+            return
+        }
+        defer {
+            let ret = interface.pointee.pointee.USBInterfaceClose(interface)
+            if (ret != kIOReturnSuccess) {
+                if let cretstr = mach_error_string(ret) {
+                    retstr = String(cString: cretstr)
+                }
+                os_log("[%@:%d] USBInterfaceClose failed with status %@", log: facility, type: .fault, #file, #line, retstr)
+            }
+        }
+        ret = interface.pointee.pointee.ControlRequest(interface, 0, &request)
+        guard ret == kIOReturnSuccess else {
+            if let cretstr = mach_error_string(ret) {
+                retstr = String(cString: cretstr)
+            }
+            os_log("[%@:%d] ControlRequest failed with status %@", log: facility, type: .fault, #file, #line, retstr)
+            return
+        }
 	}
 }
 internal extension UVC {
